@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  nginx:
+    build: ./requirements/nginx
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_files:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+    restart: always
+    env_file:
+      - .env
+
+  wordpress:
+    build: ./requirements/wordpress
+    volumes:
+      - wordpress_files:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    restart: always
+    env_file:
+      - .env
+
+  mariadb:
+    build: ./requirements/mariadb
+    volumes:
+      - wordpress_db:/var/lib/mysql
+    networks:
+      - inception
+    restart: always
+    env_file:
+      - .env
+
+volumes:
+  wordpress_files:
+    name: wordpress_files
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/gberthol/data/wordpress
+
+networks:
+  inception:
+    driver: bridge
