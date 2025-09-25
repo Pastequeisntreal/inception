@@ -25,10 +25,10 @@ prune:
 	docker system prune --all --volumes --force
 
 mysql:
-	docker-compose -f srcs/docker-compose.yml exec mariadb mysql
+	docker compose -f srcs/docker-compose.yml exec mariadb mysql
 
 clean:
-	docker-compose -f srcs/docker-compose.yml down --volumes --rmi all
+	docker compose -f srcs/docker-compose.yml down --volumes --rmi all
 
 fclean: clean
 	sudo rm -rf ~/data
