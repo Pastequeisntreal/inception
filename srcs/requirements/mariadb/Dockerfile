@@ -1,18 +1,18 @@
-FROM debian:bookworm
+FROM debian:11
 
-RUN apt-get update && \
-    apt-get install -y mariadb-server && \
-    apt-get clean && \
+RUN apt update && \
+    apt install -y mariadb-server --no-install-recommends && \
+    apt clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /run/mysqld && \
-    chown -R mysql:mysql /run/mysqld && \
-    mkdir -p /var/lib/mysql && \
-    chown -R mysql:mysql /var/lib/mysql
+RUN mkdir -p /run/mysqld/
+RUN chown -R mysql:mysql /run/mysqld/
 
-COPY tools/init.sh /init.sh
-RUN chmod +x /init.sh
+COPY tools/init.sh /usr/local/bin/init.sh
+RUN chmod +x /usr/local/bin/init.sh
 
-EXPOSE 3306
+COPY conf/mariadb.cnf /etc/mysql/mariadb.conf.d/mariadb.cnf
 
-ENTRYPOINT ["/init.sh"]
+ENTRYPOINT ["/usr/local/bin/init.sh"]
+
+CMD ["mariadbd"]
