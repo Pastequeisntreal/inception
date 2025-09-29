@@ -1,4 +1,4 @@
-FROM debian:11
+FROM debian:bullseye
 
 RUN apt update && \
     apt install -y mariadb-server --no-install-recommends && \
